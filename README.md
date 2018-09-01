@@ -1,4 +1,4 @@
-# #BlazorQuiz
+## BlazorQuiz
 Simple quiz app using Blazor.NET 
 
 ## What is Blazor
