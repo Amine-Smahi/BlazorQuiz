@@ -1,7 +1,106 @@
 ﻿@page "/"
+@using System
+@using System.Collections.Generic
+@using System.Linq
+@using System.Threading
 
-<h1>Hello, world!</h1>
+<div class="row">
+    <div class="col-md-4 quiz">
+<div class="card">
+   
+  <img class="card-img-top" src="https://www.bcsh.fr/%22/_media/img/small/quiz-image.jpg" alt="Card image cap">
+   @if(start){
+       <div class="onTopOfEachOther">
+           <div id='a'>
+  <div class="card-body">
+      <center>
+    <h3 class="card-title">@quizes[i].Question</h3>
+    <p class="card-text">Question @(i+1) / @quizes.Length</p>
+    </center>
+  </div>
+  <ul class="list-group list-group-flush">
+       
+    <button class="list-group-item ripple" onclick="@(() =>  Evaluate(quizes[i].IndexCorrectAnswer,1))">@quizes[i].Answers[0]</button>
+    <button class="list-group-item ripple" onclick="@(() =>  Evaluate(quizes[i].IndexCorrectAnswer,1))">@quizes[i].Answers[1]</button>
+    <button class="list-group-item ripple" onclick="@(() =>  Evaluate(quizes[i].IndexCorrectAnswer,1))">@quizes[i].Answers[2]</button>
+       
+  </ul>
+  </div>
+  </div>
+  }
+  else{
+        <div class="card-body">
+            <center>
+             <h3 class="card-title">@Result</h3>
+    <button class="btn btn-danger btn-block ripple"  onclick="@Restart" >Restart</button>
+    </center>
+  </div>
+  }
+</div>
+</div>
+</div>    
 
-Welcome to your new app.
+@functions {
+    string Result = "";
+    public int i = 0;
+    bool start = true;
+    int NumberCorrectAnswers = 1;
+     Quiz [] quizes = new Quiz[] {
+               new Quiz(){ 
+                Question = "Is DebaOS a real os ?",
+                Answers = new List<string>{
+                    "Yes",
+                    "No",
+                    "Maybe"
+                },
+                IndexCorrectAnswer = 0
+               },
+               new Quiz(){ 
+                Question = "What we call mami's world ?",
+                Answers = new List<string>{
+                    "Real world",
+                    "Absolute Wolrd",
+                    "My world"
+                },
+                IndexCorrectAnswer = 1
+               },
+               new Quiz(){ 
+                Question = "Who is our hero ?",
+                Answers = new List<string>{
+                    "Batman",
+                    "Superman",
+                    "Saih"
+                },
+                IndexCorrectAnswer = 2
+               }
+            };
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+     void Evaluate(int idquestion, int myanswer){
+    {
+         
+        if(i < (quizes.Length-1)){
+             JSRuntime.Current.InvokeAsync<string>("Animator.Animate");
+             Thread.Sleep(250);
+             i++;
+            Quiz qu = quizes[idquestion];
+            if(qu.IndexCorrectAnswer == myanswer){
+                NumberCorrectAnswers++;
+            }
+        }
+        else{
+            JSRuntime.Current.InvokeAsync<string>("Animator.Animate");
+            Thread.Sleep(250);
+            Result = "Correct Answers "+ NumberCorrectAnswers + "/" + (i+1);
+            start = false;
+        }
+    }
+
+}
+ async void Restart(){
+     Thread.Sleep(250);
+     start = true;
+     i = 0;
+    NumberCorrectAnswers = 0;
+    await JSRuntime.Current.InvokeAsync<string>("Animator.Animate");
+ }
+}
