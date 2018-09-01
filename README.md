@@ -1,5 +1,5 @@
 ## BlazorQuiz
-Simple quiz app using Blazor.NET 
+Simple quiz using Blazor.NET and Webassembly.
 
 ## What is Blazor
 Blazor is an experimental .NET web framework using C# and HTML that runs in the browser.
